@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".signupActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="324dp"
+        android:layout_height="214dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="316dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="@dimen/edit_text_width"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="10dp"
+            android:hint="please_enter_email" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="@dimen/edit_text_width"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="10dp"
+            android:hint="please_enter_password"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/phoneNumber"
+            android:layout_width="@dimen/edit_text_width"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="10dp"
+            android:hint="please_enter_phone_number"
+            android:inputType="number" />
+
+        <se.aaro.gustav.passwordstrengthmeter.PasswordStrengthMeter
+            android:id="@+id/passwordInputMeter"
+            android:layout_width="299dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="10dp"
+            app:animateChanges="true"
+            app:animationDuration="300"
+            app:labelTextSize="12sp"
+            app:showStrengthBar="true"
+            app:showStrengthLabel="true"
+            app:strengthBarHeight="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_marginEnd="72dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_marginTop="90dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="signup"
+            android:text="signup" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
