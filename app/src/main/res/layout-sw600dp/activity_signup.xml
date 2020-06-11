@@ -8,8 +8,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="331dp"
-        android:layout_height="389dp"
+        android:layout_width="535dp"
+        android:layout_height="444dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="292dp"
         android:orientation="vertical"
@@ -20,9 +20,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:startIconDrawable="@drawable/ic_account_circle_black_30dp"
             android:layout_margin="5dp"
-            android:hint="@string/name">
+            android:hint="NAME"
+            app:startIconDrawable="@drawable/ic_account_circle_black_30dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
@@ -38,8 +38,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:startIconDrawable= "@drawable/ic_alternate_email_black_30dp"
-            android:hint="@string/email">
+            android:hint="EMAIL"
+            app:startIconDrawable="@drawable/ic_alternate_email_black_30dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_signup"
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:hint="@string/password"
+            android:hint="PASSWORD"
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:hint="@string/repeat_password"
+            android:hint="REPEAT PASSWORD"
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -87,8 +87,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:startIconDrawable= "@drawable/ic_call_black_30dp"
-            android:hint="@string/phone_number">
+            android:hint="PHONE NUMBER"
+            app:startIconDrawable="@drawable/ic_call_black_30dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/phone_number_signup"
@@ -131,7 +131,7 @@
             android:background="?attr/selectableItemBackground"
             android:foreground="?attr/selectableItemBackground"
             android:onClick="signup"
-            android:text="@string/signup" />
+            android:text="signup" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
