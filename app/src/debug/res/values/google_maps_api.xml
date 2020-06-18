@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=3B:82:B1:2D:14:79:E9:47:65:22:34:F9:BA:12:55:73:BF:87:5F:86%3Bcom.animesh.notfallapp.activities
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.animesh.notfallapp.activities
+
+    SHA-1 certificate fingerprint:
+    3B:82:B1:2D:14:79:E9:47:65:22:34:F9:BA:12:55:73:BF:87:5F:86
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBdIoP23RFQYlS1EK5AV7EPFbi17G5Ra0s</string>
+</resources>

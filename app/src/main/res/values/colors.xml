@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorSnow">#fffafa</color>
+    <color name="colorIvory">#cdcdc1</color>
+    <color name="foregroundColor">#F8F0F0</color>
+    <color name="selectionColor">#8C9CF1</color>
 </resources>
