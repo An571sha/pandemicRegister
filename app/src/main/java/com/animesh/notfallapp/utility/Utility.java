@@ -1,9 +1,15 @@
 package com.animesh.notfallapp.utility;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.animesh.notfallapp.activities.LoginActivity;
 import com.animesh.notfallapp.commons.User;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+
+import java.util.Objects;
 
 public class Utility {
 
@@ -26,6 +32,13 @@ public class Utility {
             return false;
 
         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
+    public static void showFirebaseExceptionToast(Context context, Task task){
+        String exception = Objects.requireNonNull(task.getException()).toString();
+        String trimmedExceptionName = exception.substring(exception.lastIndexOf(":") + 1).trim();
+        Toast.makeText(context, trimmedExceptionName, Toast.LENGTH_SHORT).show();
+        Log.i(Utility.getTAG(), trimmedExceptionName);
     }
 
 

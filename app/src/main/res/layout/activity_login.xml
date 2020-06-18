@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.loginActivity">
+    tools:context=".activities.LoginActivity">
 
 
     <com.google.android.material.textview.MaterialTextView
@@ -28,10 +28,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="326dp"
-        android:layout_height="202dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="272dp"
+        android:layout_width="305dp"
+        android:layout_height="412dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="116dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -41,11 +41,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:startIconDrawable= "@drawable/ic_alternate_email_black_30dp"
-            android:hint="@string/email">
+            android:hint="@string/email"
+            app:startIconDrawable="@drawable/ic_alternate_email_black_30dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
+                android:id="@+id/email_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" />
@@ -60,13 +60,42 @@
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password"
+                android:id="@+id/password_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sign_in_button"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimary"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="signInWithEmail"
+            android:text="sign in"
+            app:icon="@drawable/ic_menu_send" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:fontFamily="@font/advent_pro_light"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="     OR "
+            android:layout_height="wrap_content"
+
+            />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_google"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="SIGN IN WITH GOOGLE"/>
 
         <LinearLayout
             android:layout_width="289dp"
@@ -93,37 +122,12 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:foreground="?attr/selectableItemBackground"
-                android:onClick="signup"
-                android:text="@string/signup"/>
+                android:onClick="signUp"
+                android:text="@string/signup" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="1.0">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/sign_in_button"
-            style="?attr/materialButtonOutlinedStyle"
-            app:icon="@drawable/ic_menu_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:layout_marginTop="90dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:background="@color/colorPrimary"
-            android:onClick="signin"
-            android:text="sign in" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

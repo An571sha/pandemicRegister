@@ -21,6 +21,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
+import se.aaro.gustav.passwordstrengthmeter.PasswordStrengthMeter;
+
+
 public class SignupActivity extends AppCompatActivity {
 
     private EditText emailField;
@@ -29,11 +34,11 @@ public class SignupActivity extends AppCompatActivity {
     private EditText usernameField;
     private EditText phoneNumberField;
     private Button signUpButton;
+    private PasswordStrengthMeter meter;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private DatabaseReference userDatabase;
-
 
     private String email;
     private String username;
@@ -54,11 +59,13 @@ public class SignupActivity extends AppCompatActivity {
         phoneNumberField = findViewById(R.id.phone_number_signup);
         repeatPasswordField = findViewById(R.id.repeat_password_signup);
         signUpButton = findViewById(R.id.button_signup);
+        meter = findViewById(R.id.passwordInputMeter);
 
         mAuth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userDatabase = FirebaseDatabase.getInstance().getReference();
 
+        meter.setEditText(passwordField);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,10 +86,12 @@ public class SignupActivity extends AppCompatActivity {
         if (email != null && password != null && username != null && repeatPassword != null ) {
 
             if (Utility.isValidEmail(email) && password.equals(repeatPassword)) {
+
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+
                                 if (task.isSuccessful()) {
 
                                     Log.i(Utility.getTAG(), "createUserWithEmail:success");
@@ -95,13 +104,14 @@ public class SignupActivity extends AppCompatActivity {
                                     passwordField.getText().clear();
                                     phoneNumberField.getText().clear();
 
-                                    intent = new Intent(SignupActivity.this, loginActivity.class);
+                                    intent = new Intent(SignupActivity.this, LoginActivity.class);
                                     startActivity(intent);
 
                                 } else {
-                                    Log.i(Utility.getTAG(), "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(SignupActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                                    String exception = Objects.requireNonNull(task.getException()).toString();
+                                    String trimmedExceptionName = exception.substring(exception.lastIndexOf(":") + 1).trim();
+                                    Toast.makeText(SignupActivity.this, trimmedExceptionName, Toast.LENGTH_SHORT).show();
+                                    Log.e(Utility.getTAG(), trimmedExceptionName);
                                 }
                             }
                         });

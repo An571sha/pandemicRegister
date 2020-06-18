@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.loginActivity">
+    tools:context=".activities.LoginActivity">
 
 
     <com.google.android.material.textview.MaterialTextView
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:foreground="?attr/selectableItemBackground"
-                android:onClick="signup"
+                android:onClick="signUp"
                 android:text="SIGN UP"
                 android:textSize="12dp" />
 
@@ -121,7 +121,7 @@
             android:layout_marginTop="90dp"
             android:background="@color/colorPrimary"
             android:foreground="?attr/selectableItemBackground"
-            android:onClick="signin"
+            android:onClick="signInWithEmail"
             android:text="sign in"
             app:icon="@drawable/ic_menu_send" />
 

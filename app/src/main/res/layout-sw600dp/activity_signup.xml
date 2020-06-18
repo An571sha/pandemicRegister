@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:foreground="?attr/selectableItemBackground"
-            android:onClick="signup"
+            android:onClick="signUp"
             android:text="signup" />
     </LinearLayout>
 

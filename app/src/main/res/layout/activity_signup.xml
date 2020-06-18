@@ -11,7 +11,7 @@
         android:layout_width="331dp"
         android:layout_height="389dp"
         android:layout_marginEnd="40dp"
-        android:layout_marginBottom="292dp"
+        android:layout_marginBottom="324dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -20,12 +20,28 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:startIconDrawable="@drawable/ic_account_circle_black_30dp"
             android:layout_margin="5dp"
-            android:hint="@string/name">
+            android:hint="@string/name"
+            app:startIconDrawable="@drawable/ic_account_circle_black_30dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/phone_number"
+            app:startIconDrawable="@drawable/ic_call_black_30dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phone_number_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" />
@@ -38,8 +54,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:startIconDrawable= "@drawable/ic_alternate_email_black_30dp"
-            android:hint="@string/email">
+            android:hint="@string/email"
+            app:startIconDrawable="@drawable/ic_alternate_email_black_30dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_signup"
@@ -82,27 +98,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            app:startIconDrawable= "@drawable/ic_call_black_30dp"
-            android:hint="@string/phone_number">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phone_number_signup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
         <se.aaro.gustav.passwordstrengthmeter.PasswordStrengthMeter
             android:id="@+id/passwordInputMeter"
-            android:layout_width="299dp"
+            android:layout_width="match_parent"
             android:layout_height="31dp"
             android:layout_margin="5dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             app:animateChanges="true"
             app:animationDuration="300"
