@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.animesh.notfallapp.activities.LoginActivity;
 import com.animesh.notfallapp.commons.User;
+import com.animesh.notfallapp.commons.UserLocationAndStatus;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 
@@ -23,8 +23,15 @@ public class Utility {
         } catch (Exception e) {
             Log.i(TAG, e.getMessage());
         }
+    }
 
-
+    public static void writeNewUserLocationAndStatus(DatabaseReference databaseReference, String userId, Double latitiude, Double longitude, String address, String status){
+        try {
+            UserLocationAndStatus user = new UserLocationAndStatus(userId,latitiude,longitude,address,status);
+            databaseReference.child("status").child(userId).setValue(user);
+        } catch (Exception e) {
+            Log.i(TAG, e.getMessage());
+        }
     }
 
     public static boolean isValidEmail(CharSequence target) {

@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -24,7 +27,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,11 +42,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private String email;
     private String password;
+    private DatabaseReference userDatabase;
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
 
     private final int RC_SIGN_IN = 100;
+    private final String USER_ID  = "user_id" ;
 
 
     @Override
@@ -50,6 +60,8 @@ public class LoginActivity extends AppCompatActivity {
         emailField = findViewById(R.id.email_login);
         passwordField = findViewById(R.id.password_login);
         googleSignInButton = findViewById(R.id.sign_in_google);
+        userDatabase = FirebaseDatabase.getInstance().getReference();
+
 
         //configuring google sign in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -113,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             Log.d(Utility.getTAG(), "signInWithCredential:success");
+                            Utility.writeNewUser(userDatabase, email, mAuth.getUid(), Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName(), mAuth.getCurrentUser().getPhoneNumber());
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
 
@@ -143,6 +156,31 @@ public class LoginActivity extends AppCompatActivity {
                 Utility.showFirebaseExceptionToast(LoginActivity.this, task);
 
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                //
+                return true;
+            case R.id.action_help:
+                //
+                return true;
+            case R.id.action_about:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

@@ -5,5 +5,15 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_settings_black_18dp"/>
+
+    <item android:id="@+id/action_help"
+        android:orderInCategory="101"
+        android:icon="@drawable/ic_settings_black_18dp"
+        android:title="Help" />
+
+    <item android:id="@+id/action_about"
+        android:orderInCategory="102"
+        android:icon="@drawable/ic_settings_black_18dp"
+        android:title="About us" />
 </menu>

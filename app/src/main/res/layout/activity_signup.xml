@@ -11,10 +11,11 @@
         android:layout_width="331dp"
         android:layout_height="389dp"
         android:layout_marginEnd="40dp"
-        android:layout_marginBottom="324dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.216">
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -115,8 +116,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_width="0dp"
+        android:layout_height="121dp"
         android:layout_marginEnd="40dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
