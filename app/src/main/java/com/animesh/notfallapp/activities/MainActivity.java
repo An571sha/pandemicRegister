@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.w("My Current loction address", "Cannot get Address!");
+                Log.w("My Current location address", "Cannot get Address!");
             }
             return strAdd;
         });

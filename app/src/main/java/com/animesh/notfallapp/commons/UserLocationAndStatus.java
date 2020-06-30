@@ -16,6 +16,10 @@ public class UserLocationAndStatus {
         this.status = status;
     }
 
+    public UserLocationAndStatus() {
+
+    }
+
     public String getUserId() {
         return userId;
     }
