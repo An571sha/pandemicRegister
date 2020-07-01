@@ -7,13 +7,15 @@ public class UserLocationAndStatus {
     private Double longitude;
     private String address;
     private String status;
+    private String phoneNumber;
 
-    public UserLocationAndStatus(String userId, Double latitude, Double longitude, String address, String status) {
+    public UserLocationAndStatus(String userId, Double latitude, Double longitude, String address, String status, String phoneNumber) {
         this.userId = userId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
         this.status = status;
+        this.phoneNumber = phoneNumber;
     }
 
     public UserLocationAndStatus() {
@@ -59,6 +61,15 @@ public class UserLocationAndStatus {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
 
 
 

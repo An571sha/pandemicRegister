@@ -25,9 +25,9 @@ public class Utility {
         }
     }
 
-    public static void writeNewUserLocationAndStatus(DatabaseReference databaseReference, String userId, Double latitiude, Double longitude, String address, String status){
+    public static void writeNewUserLocationAndStatus(DatabaseReference databaseReference, String userId, Double latitiude, Double longitude, String address, String status, String phoneNumber){
         try {
-            UserLocationAndStatus user = new UserLocationAndStatus(userId,latitiude,longitude,address,status);
+            UserLocationAndStatus user = new UserLocationAndStatus(userId,latitiude,longitude,address,status, phoneNumber);
             databaseReference.child("status").child(userId).setValue(user);
         } catch (Exception e) {
             Log.i(TAG, e.getMessage());

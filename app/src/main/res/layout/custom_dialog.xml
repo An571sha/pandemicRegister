@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/radio_linear_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:fontFamily="@font/advent_pro_light"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:text="@string/please_select_a_status"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#5d5d5d" />
+
+        <RadioGroup
+            android:id="@+id/status_radio_group"
+            android:checkedButton="@+id/radio_button_1"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radio_button_1"
+                android:fontFamily="@font/advent_pro_light"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="I am OK"/>
+            <RadioButton
+                android:id="@+id/radio_button_2"
+                android:fontFamily="@font/advent_pro_light"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="I am Sick"/>
+            <RadioButton
+                android:id="@+id/radio_button_3"
+                android:fontFamily="@font/advent_pro_light"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="I need Help"/>
+            <RadioButton
+                android:id="@+id/radio_button_4"
+                android:fontFamily="@font/advent_pro_light"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="I can Help"/>
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#5d5d5d" />
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/phone_number"
+        app:prefixText="00"
+        app:prefixTextColor="@color/colorIvory"
+        android:layout_marginTop="5dp"
+        app:startIconDrawable="@drawable/ic_call_black_18dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phone_dialog"
+            android:layout_width="match_parent"
+            android:inputType="phone"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filledTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:startIconDrawable="@drawable/ic_location_on_black_18dp"
+        android:hint="@string/location">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/location_dialog"
+            android:layout_width="match_parent"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:orientation="vertical" >
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:id="@+id/btn_yes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="OK"
+            android:layout_margin="2dp"
+            app:icon="@drawable/ic_thumb_up_alt_black_18dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_no"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="Cancel"
+            android:layout_margin="2dp"
+            app:icon="@drawable/ic_clear_black_18dp"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>
+

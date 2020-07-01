@@ -34,4 +34,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="tab_text_1">Maps</string>
     <string name="tab_text_2">Settings</string>
+    <string name="location">LOCATION</string>
+    <string name="please_select_a_status">Please select a Status</string>
 </resources>

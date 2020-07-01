@@ -1,9 +1,12 @@
 package com.animesh.notfallapp.activities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -13,23 +16,32 @@ import android.os.Bundle;
 import com.animesh.notfallapp.utility.Utility;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,16 +51,18 @@ import com.animesh.notfallapp.R;
 import com.animesh.notfallapp.adapters.SectionsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-
-import static java.lang.String.*;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -60,12 +74,18 @@ public class MainActivity extends AppCompatActivity {
     private String user_id;
     private String address;
     private String status;
+
     private TextView userIdView;
     private DatabaseReference userDatabase;
     private FirebaseUser currentFirebaseUser;
     private Location[] location_array;
-    private Double latitude;
-    private Double longitude;
+    private String phoneNumber;
+
+    private EditText phoneNumberTextBox;
+    private EditText locationTextBox;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
+    public Button yesButton, noButton;
 
     private static final Executor mExecutor = Executors.newSingleThreadExecutor();
     private FusedLocationProviderClient fusedLocationClient;
@@ -76,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userIdView = findViewById(R.id.user_id);
+
 
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userDatabase = FirebaseDatabase.getInstance().getReference();
@@ -146,14 +167,48 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
+        //enable GPS
         checkAndEnableGps();
 
+        //enable location services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        if (currentFirebaseUser != null) {
+        if (currentFirebaseUser != null && userDatabase != null) {
+
+            //get user id
             user_id = currentFirebaseUser.getUid();
+
+            //get user phone number. It is an important part of this app
+            if (currentFirebaseUser.getPhoneNumber() == null || currentFirebaseUser.getPhoneNumber().isEmpty()) {
+
+                DatabaseReference userRef = userDatabase.child("users");
+                userRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+
+                            if (userSnapshot.child(user_id).getValue() != null) {
+
+                                phoneNumber = Objects.requireNonNull(userSnapshot.child(user_id).getValue()).toString();
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            } else {
+
+                phoneNumber = currentFirebaseUser.getPhoneNumber();
+            }
+
         }
 
+        //get last location
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
                     // Got last known location. In some rare situations this can be null.
@@ -168,41 +223,63 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> createDialogBoxForStatus(location_array[0]));
     }
 
+
     public void createDialogBoxForStatus(Location location) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose your status");
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog);
+        yesButton = dialog.findViewById(R.id.btn_yes);
+        noButton = dialog.findViewById(R.id.btn_no);
+        radioGroup = dialog.findViewById(R.id.status_radio_group);
+        phoneNumberTextBox = dialog.findViewById(R.id.phone_dialog);
+        locationTextBox = dialog.findViewById(R.id.location_dialog);
 
-        String[] status = {"I am OK", "I am Sick", "I need Help", "I can Help"};
-        int checkedItem = 1;
+        getCompleteAddressString(
+                location.getLatitude(),
+                location.getLongitude(),
+                gen_address -> {
+                    address = gen_address;
+                    runOnUiThread(() -> locationTextBox.setText(address));
+                });
 
-        builder.setSingleChoiceItems(status, checkedItem, (dialog, which) -> this.status = status[which]);
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
 
-        builder.setPositiveButton("OK", (dialog, which) -> {
+            phoneNumberTextBox.setText(phoneNumber);
+
+        }
+
+        //get status
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            radioButton = dialog.findViewById(checkedId);
+            status = radioButton.getText().toString();
+        });
+
+        //upload status, address and phone number to Firebase, if given
+        yesButton.setOnClickListener(v -> {
             Tasks.call(mExecutor, () -> {
-                getCompleteAddressString(
+
+                phoneNumber = phoneNumberTextBox.getText().toString();
+
+                Utility.writeNewUserLocationAndStatus(userDatabase,
+                        user_id,
                         location.getLatitude(),
                         location.getLongitude(),
-                        gen_address -> {
-                            address = gen_address;
-                            Utility.writeNewUserLocationAndStatus(userDatabase,
-                                    user_id,
-                                    location.getLatitude(),
-                                    location.getLongitude(),
-                                    address,
-                                    this.status);
-                });
+                        address,
+                        status,
+                        phoneNumber);
 
                 return null;
             });
-            userIdView.setText(this.status);
+
+            dialog.dismiss();
         });
-        builder.setNegativeButton("Cancel", null);
 
-        AlertDialog dialog = builder.create();
+        noButton.setOnClickListener(v -> dialog.dismiss());
+
         dialog.show();
-    }
 
+    }
 
     public void checkAndEnableGps(){
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -214,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getCompleteAddressString(double LATITUDE, double LONGITUDE, Consumer<String> successCallback) {
+    public void getCompleteAddressString(double LATITUDE, double LONGITUDE, Consumer<String> successCallback) {
         Task<String> searchTask = Tasks.call(mExecutor, () -> {
             String strAdd = "";
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -240,6 +317,4 @@ public class MainActivity extends AppCompatActivity {
             return strAdd;
         });
     }
-
-
 }
