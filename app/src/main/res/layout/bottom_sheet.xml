@@ -23,11 +23,13 @@
             android:layout_weight="5"
             android:orientation="vertical">
 
-            <TextView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/status_bottom_sheet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dandelion Chocolate"
-                android:textColor="#000000"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/advent_pro_light"
+                android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -38,10 +40,12 @@
                 android:layout_marginBottom="12dp"
                 android:background="#5d5d5d" />
 
-            <TextView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/distance_bottom_sheet"
                 android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
                 android:layout_height="wrap_content"
-                android:text="12 min away"
+                android:text=""
                 android:textColor="#5692F5" />
 
             <View
@@ -55,29 +59,44 @@
 
     </LinearLayout>
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/location_bottom_sheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:drawableLeft="@drawable/ic_location_on_black_18dp"
-        android:drawablePadding="16dp"
-        android:text="740 Valencia St, San Fracisco, CA" />
+        android:background="@android:color/transparent"
+        android:layout_margin="5dp"
+        android:textSize="13sp"
+        android:singleLine="true"
+        android:drawableStart="@drawable/ic_location_on_black_18dp"
+        android:drawablePadding="16dp"/>
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/phone_bottom_sheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:drawableLeft="@drawable/ic_call_black_18dp"
-        android:drawablePadding="16dp"
-        android:text="(415) 349-0942" />
+        android:background="@android:color/transparent"
+        android:layout_margin="5dp"
+        android:singleLine="true"
+        android:textSize="13sp"
+        android:drawableStart="@drawable/ic_call_black_18dp"
+        android:drawablePadding="16dp"/>
 
 
     <Button
+        android:id ="@+id/call_bottom_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:background="#000"
-        android:text="PROCEED PAYMENT"
+        android:text="@string/call"
+        android:textColor="#fff" />
+    <Button
+        android:id ="@+id/text_bottom_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="#000"
+        android:text="@string/send_text"
         android:textColor="#fff" />
 
 </LinearLayout>

@@ -11,16 +11,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.animesh.notfallapp.R;
-import com.animesh.notfallapp.commons.MapsDisplayItems;
+import com.animesh.notfallapp.commons.MapsDisplayItem;
 import com.animesh.notfallapp.commons.UserLocationAndStatus;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.Tasks;
@@ -48,7 +48,7 @@ public class MapViewFragment extends Fragment {
     private HashMap<String, UserLocationAndStatus> userIdAndstatus;
 
     private DatabaseReference userDatabase;
-    private ClusterManager<MapsDisplayItems> clusterManager;
+    private ClusterManager<MapsDisplayItem> clusterManager;
 
     private static final Executor mExecutor = Executors.newSingleThreadExecutor();
     private static final String ARG_POSITION = "position";
@@ -78,17 +78,11 @@ public class MapViewFragment extends Fragment {
 
             googleMap.setMyLocationEnabled(true);
 
-            googleMap.setOnMarkerClickListener(marker -> {
-                BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-                bottomSheetFragment.show(myContext.getSupportFragmentManager(), bottomSheetFragment.getTag());
-                return true;
-            });
-
             //display the markers if retrieved properly. otherwise throw exception toast
             getUserLocationAndStatusData(success-> {
 
-                clusterManager =  new ClusterManager<MapsDisplayItems>(getContext(), googleMap);
-                CustomRenderer<MapsDisplayItems> customRenderer = new CustomRenderer<MapsDisplayItems>(getContext(), googleMap, clusterManager);
+                clusterManager =  new ClusterManager<MapsDisplayItem>(getContext(), googleMap);
+                CustomRenderer<MapsDisplayItem> customRenderer = new CustomRenderer<MapsDisplayItem>(getContext(), googleMap, clusterManager);
                 clusterManager.setRenderer(customRenderer);
                 LatLngBounds.Builder latLngbuilder = new LatLngBounds.Builder();
 
@@ -96,30 +90,42 @@ public class MapViewFragment extends Fragment {
                     LatLng latLng = new LatLng(userLocationAndStatus.getLatitude(), userLocationAndStatus.getLongitude());
                     latLngbuilder.include(latLng);
 
-                    MapsDisplayItems mapsDisplayItems = new MapsDisplayItems("Marker #", latLng);
-                    clusterManager.addItem(mapsDisplayItems);
+                    MapsDisplayItem mapsDisplayItem = new MapsDisplayItem(userLocationAndStatus.getStatus(),
+                            latLng,
+                            userLocationAndStatus.getAddress(),
+                            userLocationAndStatus.getPhoneNumber());
+                    clusterManager.addItem(mapsDisplayItem);
                 }
 
                 //center the camera between the bounds
                 latLngBounds = latLngbuilder.build();
 
-                googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback(){
+                googleMap.setOnMapLoadedCallback(() -> {
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds,0);
+                    googleMap.setMinZoomPreference(1f);
+                    googleMap.moveCamera(cameraUpdate);
+                    googleMap.animateCamera(cameraUpdate);
+                    googleMap.getUiSettings().setZoomControlsEnabled(true);
 
-                    @Override
-                    public void onMapLoaded() {
-                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds,0);
-                        googleMap.setMinZoomPreference(1f);
-                        googleMap.moveCamera(cameraUpdate);
-                        googleMap.animateCamera(cameraUpdate);
-                        googleMap.getUiSettings().setZoomControlsEnabled(true);
-                    }
+
+                });
+
+                //set up marker click listener
+                googleMap.setOnMarkerClickListener(clusterManager);
+                clusterManager.setOnClusterItemClickListener(mapsDisplayItem -> {
+//                    BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+//                    bottomSheetFragment.show(myContext.getSupportFragmentManager(), bottomSheetFragment.getTag());
+                    BottomSheetFragment.newInstance(mapsDisplayItem).show(myContext.getSupportFragmentManager(), "dialog_playback");
+                    return true;
                 });
 
                 }, failure -> {
 
                 FAILURE_TEXT = failure;
                 Toast.makeText(getContext(), FAILURE_TEXT, Toast.LENGTH_SHORT).show();
-            });
+
+           });
+
 
         });
 

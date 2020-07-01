@@ -31,9 +31,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="title_activity_main">MainActivity</string>
     <string name="tab_text_1">Maps</string>
     <string name="tab_text_2">Settings</string>
     <string name="location">LOCATION</string>
     <string name="please_select_a_status">Please select a Status</string>
+    <string name="call">Make a call</string>
+    <string name="send_text">Send a text</string>
 </resources>
