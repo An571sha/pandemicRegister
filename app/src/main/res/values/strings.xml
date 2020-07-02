@@ -34,9 +34,10 @@
 
     <string name="title_activity_main">MainActivity</string>
     <string name="tab_text_1">Maps</string>
-    <string name="tab_text_2">Settings</string>
+    <string name="tab_text_2">List</string>
     <string name="location">LOCATION</string>
     <string name="please_select_a_status">Please select a Status</string>
     <string name="call">Make a call</string>
     <string name="send_text">Send a text</string>
+    <string name="no_data_available">No Data Available</string>
 </resources>

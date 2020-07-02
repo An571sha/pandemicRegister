@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.animesh.notfallapp.R;
 import com.animesh.notfallapp.fragments.MapViewFragment;
-import com.animesh.notfallapp.fragments.SettingsFragment;
+import com.animesh.notfallapp.fragments.ListFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -48,7 +48,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return MapViewFragment.newInstance(position);
             }
             case 1:{
-                return SettingsFragment.newInstance(position);
+                return ListFragment.newInstance(position);
             }
         }
         return null;    }

@@ -9,20 +9,28 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.animesh.notfallapp.R;
+import com.animesh.notfallapp.activities.MainActivity;
 import com.animesh.notfallapp.commons.MapsDisplayItem;
 import com.animesh.notfallapp.commons.UserLocationAndStatus;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,11 +43,12 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-public class MapViewFragment extends Fragment {
+public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
     private MapView mMapView;
     private GoogleMap googleMap;
@@ -52,115 +61,14 @@ public class MapViewFragment extends Fragment {
 
     private static final Executor mExecutor = Executors.newSingleThreadExecutor();
     private static final String ARG_POSITION = "position";
+    private final int CAMERA_PADDING = 10;
     private static String FAILURE_TEXT;
     private LatLngBounds latLngBounds;
 
+    private SupportMapFragment fragment;
+    private Bundle mBundle;
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.maps_fragment, container, false);
-        mMapView = (MapView) rootView.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
-        userDatabase = FirebaseDatabase.getInstance().getReference();
-        mMapView.onResume(); // needed to get the map to display immediately
-
-        try {
-            MapsInitializer.initialize(requireActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        mMapView.getMapAsync(mMap -> {
-
-            googleMap = mMap;
-
-            googleMap.setMyLocationEnabled(true);
-
-            //display the markers if retrieved properly. otherwise throw exception toast
-            getUserLocationAndStatusData(success-> {
-
-                clusterManager =  new ClusterManager<MapsDisplayItem>(getContext(), googleMap);
-                CustomRenderer<MapsDisplayItem> customRenderer = new CustomRenderer<MapsDisplayItem>(getContext(), googleMap, clusterManager);
-                clusterManager.setRenderer(customRenderer);
-                LatLngBounds.Builder latLngbuilder = new LatLngBounds.Builder();
-
-                for (UserLocationAndStatus userLocationAndStatus: userIdAndstatus.values()) {
-                    LatLng latLng = new LatLng(userLocationAndStatus.getLatitude(), userLocationAndStatus.getLongitude());
-                    latLngbuilder.include(latLng);
-
-                    MapsDisplayItem mapsDisplayItem = new MapsDisplayItem(userLocationAndStatus.getStatus(),
-                            latLng,
-                            userLocationAndStatus.getAddress(),
-                            userLocationAndStatus.getPhoneNumber());
-                    clusterManager.addItem(mapsDisplayItem);
-                }
-
-                //center the camera between the bounds
-                latLngBounds = latLngbuilder.build();
-
-                googleMap.setOnMapLoadedCallback(() -> {
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds,0);
-                    googleMap.setMinZoomPreference(1f);
-                    googleMap.moveCamera(cameraUpdate);
-                    googleMap.animateCamera(cameraUpdate);
-                    googleMap.getUiSettings().setZoomControlsEnabled(true);
-
-
-                });
-
-                //set up marker click listener
-                googleMap.setOnMarkerClickListener(clusterManager);
-                clusterManager.setOnClusterItemClickListener(mapsDisplayItem -> {
-//                    BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-//                    bottomSheetFragment.show(myContext.getSupportFragmentManager(), bottomSheetFragment.getTag());
-                    BottomSheetFragment.newInstance(mapsDisplayItem).show(myContext.getSupportFragmentManager(), "dialog_playback");
-                    return true;
-                });
-
-                }, failure -> {
-
-                FAILURE_TEXT = failure;
-                Toast.makeText(getContext(), FAILURE_TEXT, Toast.LENGTH_SHORT).show();
-
-           });
-
-
-        });
-
-        return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }
-
-    @Override
-    public void onAttach(@NonNull Activity activity) {
-        myContext=(FragmentActivity) activity;
-        super.onAttach(activity);
-    }
 
     public static MapViewFragment newInstance(int position) {
         MapViewFragment f = new MapViewFragment();
@@ -170,15 +78,99 @@ public class MapViewFragment extends Fragment {
         return f;
     }
 
-    public void getUserLocationAndStatusData(Consumer<String> successCallback, Consumer<String> faliureCallback ){
-        Tasks.call(mExecutor, () -> {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
-            String done = "done with retrieving data";
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.maps_fragment, container, false);
+        userDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        mMapView.onCreate(mBundle);
+        mMapView.onResume();
+        mMapView.getMapAsync(this);
+
+        return rootView;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBundle = savedInstanceState;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        prepareMap(googleMap);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+        mMapView.getMapAsync(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+
+    @Override
+    public void onLowMemory() {
+        mMapView.onResume();
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        myContext = (FragmentActivity) activity;
+        super.onAttach(activity);
+    }
+
+    public void prepareMap(GoogleMap googleMap) {
+
+        googleMap.setMyLocationEnabled(true);
+        googleMap.clear();
+        getUserLocationAndStatusData(googleMap);
+    }
+
+    //updating the camera position on zoom
+    public void updateCameraPos(Cluster<MapsDisplayItem> cluster, float zoomLevel) {
+        //LatLngBound for clicked cluster
+        LatLngBounds.Builder latLngBuilderForCluster = new LatLngBounds.Builder();
+
+        for (MapsDisplayItem clusterItem : cluster.getItems()) {
+            latLngBuilderForCluster.include(clusterItem.getPosition());
+        }
+
+        final LatLngBounds latLngBoundsForZoom = latLngBuilderForCluster.build();
+        CameraUpdate updateCameraZoom = CameraUpdateFactory.newLatLngZoom(latLngBoundsForZoom.getCenter(), zoomLevel);
+        googleMap.setPadding(CAMERA_PADDING, CAMERA_PADDING, CAMERA_PADDING, CAMERA_PADDING);
+        googleMap.animateCamera(updateCameraZoom);
+
+    }
+
+        public void getUserLocationAndStatusData(GoogleMap googleMap) {
             String noUserFound = "No users were found";
 
             DatabaseReference userRef = userDatabase.child("status");
 
             userRef.addValueEventListener(new ValueEventListener() {
+
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -188,28 +180,68 @@ public class MapViewFragment extends Fragment {
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                             UserLocationAndStatus userLocationAndStatus = userSnapshot.getValue(UserLocationAndStatus.class);
                             userIdAndstatus.put(userSnapshot.getKey(), userLocationAndStatus);
-
                         }
 
-                        successCallback.accept(done);
+                        clusterManager = new ClusterManager<MapsDisplayItem>(myContext, googleMap);
+                        CustomRenderer<MapsDisplayItem> customRenderer = new CustomRenderer<MapsDisplayItem>(myContext, googleMap, clusterManager);
+                        clusterManager.setRenderer(customRenderer);
+                        LatLngBounds.Builder latLngbuilder = new LatLngBounds.Builder();
+
+                        for (UserLocationAndStatus userLocationAndStatus : userIdAndstatus.values()) {
+                            LatLng latLng = new LatLng(userLocationAndStatus.getLatitude(), userLocationAndStatus.getLongitude());
+                            latLngbuilder.include(latLng);
+
+                            MapsDisplayItem mapsDisplayItem = new MapsDisplayItem(userLocationAndStatus.getStatus(),
+                                    latLng,
+                                    userLocationAndStatus.getAddress(),
+                                    userLocationAndStatus.getPhoneNumber());
+                            clusterManager.addItem(mapsDisplayItem);
+                        }
+
+                        //center the camera between the bounds
+                        latLngBounds = latLngbuilder.build();
+
+                        googleMap.setOnMapLoadedCallback(() -> {
+                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, 0);
+                            googleMap.setMinZoomPreference(1f);
+                            googleMap.moveCamera(cameraUpdate);
+                            googleMap.animateCamera(cameraUpdate);
+                            googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+
+                        });
+
+                        //set up marker click listener
+                        googleMap.setOnMarkerClickListener(clusterManager);
+
+                        clusterManager.setOnClusterItemClickListener(mapsDisplayItem -> {
+
+                            Toast.makeText(myContext, mapsDisplayItem.getTitle(), Toast.LENGTH_SHORT).show();
+
+                            return true;
+                        });
+
+
+                        clusterManager.setOnClusterClickListener(cluster -> {
+                            float currentZoom = googleMap.getCameraPosition().zoom;
+                            updateCameraPos(cluster, currentZoom + 2);
+                            return true;
+
+                        });
 
                     } else {
-                        Toast.makeText(myContext, noUserFound,
-                                Toast.LENGTH_SHORT).show();
-                        faliureCallback.accept(noUserFound);
+                        Toast.makeText(myContext, noUserFound, Toast.LENGTH_SHORT).show();
                     }
 
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    faliureCallback.accept(databaseError.getMessage());
-                }
-            });
-            return null;
-        });
-    }
 
+                }
+
+            });
+        }
 
     public static class CustomRenderer<T extends ClusterItem> extends DefaultClusterRenderer<T> {
 
@@ -222,7 +254,7 @@ public class MapViewFragment extends Fragment {
             return cluster.getSize() > 2;
         }
 
-        protected int getBucket(Cluster<T> cluster){
+        protected int getBucket(Cluster<T> cluster) {
             return cluster.getSize();
         }
     }

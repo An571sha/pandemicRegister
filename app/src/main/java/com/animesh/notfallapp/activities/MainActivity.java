@@ -91,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
 
 
+    public interface InterfaceDataCommunicatorFromActivity {
+        public void updateData(String data);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,49 +239,55 @@ public class MainActivity extends AppCompatActivity {
         phoneNumberTextBox = dialog.findViewById(R.id.phone_dialog);
         locationTextBox = dialog.findViewById(R.id.location_dialog);
 
-        getCompleteAddressString(
-                location.getLatitude(),
-                location.getLongitude(),
-                gen_address -> {
-                    address = gen_address;
-                    runOnUiThread(() -> locationTextBox.setText(address));
-                });
+        if (location!= null) {
 
-        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            getCompleteAddressString(
+                    location.getLatitude(),
+                    location.getLongitude(),
+                    gen_address -> {
+                        address = gen_address;
+                        runOnUiThread(() -> locationTextBox.setText(address));
+                    });
 
-            phoneNumberTextBox.setText(phoneNumber);
+            if (phoneNumber != null && !phoneNumber.isEmpty()) {
 
-        }
+                phoneNumberTextBox.setText(phoneNumber);
 
-        //get status
-        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            radioButton = dialog.findViewById(checkedId);
-            status = radioButton.getText().toString();
-        });
+            }
 
-        //upload status, address and phone number to Firebase, if given
-        yesButton.setOnClickListener(v -> {
-            Tasks.call(mExecutor, () -> {
-
-                phoneNumber = phoneNumberTextBox.getText().toString();
-
-                Utility.writeNewUserLocationAndStatus(userDatabase,
-                        user_id,
-                        location.getLatitude(),
-                        location.getLongitude(),
-                        address,
-                        status,
-                        phoneNumber);
-
-                return null;
+            //get status
+            radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                radioButton = dialog.findViewById(checkedId);
+                status = radioButton.getText().toString();
             });
 
-            dialog.dismiss();
-        });
+            //upload status, address and phone number to Firebase, if given
+            yesButton.setOnClickListener(v -> {
+                Tasks.call(mExecutor, () -> {
 
-        noButton.setOnClickListener(v -> dialog.dismiss());
+                    phoneNumber = phoneNumberTextBox.getText().toString();
 
-        dialog.show();
+                    Utility.writeNewUserLocationAndStatus(userDatabase,
+                            user_id,
+                            location.getLatitude(),
+                            location.getLongitude(),
+                            address,
+                            status,
+                            phoneNumber);
+
+                    return null;
+                });
+
+                dialog.dismiss();
+            });
+
+            noButton.setOnClickListener(v -> dialog.dismiss());
+
+            dialog.show();
+
+        } else {
+            Toast.makeText(this, "Cannot retrieve location data, please restart App", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
