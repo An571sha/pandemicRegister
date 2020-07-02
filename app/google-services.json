@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1035433566746",
+    "firebase_url": "https://pandemieregister.firebaseio.com",
+    "project_id": "pandemieregister",
+    "storage_bucket": "pandemieregister.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035433566746:android:0c3a3ece269327ad06a7a3",
+        "android_client_info": {
+          "package_name": "com.animesh.notfallapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1035433566746-rfib08m3k14r95kt9ecovh03pnj8r81p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.animesh.notfallapp",
+            "certificate_hash": "3b82b12d1479e947652234f9ba125573bf875f86"
+          }
+        },
+        {
+          "client_id": "1035433566746-bq9j517hiems4ibv2lj34mbliv5t7bpv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdIoP23RFQYlS1EK5AV7EPFbi17G5Ra0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1035433566746-bq9j517hiems4ibv2lj34mbliv5t7bpv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -29,7 +29,6 @@ import static java.net.Proxy.Type.HTTP;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     private static final String MY_KEY = "my_key";
-    private static final String message = "Hello, how are you";
     private EditText statusTextView;
     private EditText distanceTextView;
     private EditText phoneTextView;
@@ -63,6 +62,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         distanceTextView.setEnabled(false);
         phoneTextView.setEnabled(false);
         addressTextView.setEnabled(false);
+
+
         callButton.setOnClickListener(v1 -> {
 
             if (phoneTextView.getText() != null && !phoneTextView.getText().toString().isEmpty()) {
@@ -81,7 +82,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             if (phoneTextView.getText() != null && !phoneTextView.getText().toString().isEmpty()) {
 
                 Intent intent = new Intent(Intent.ACTION_VIEW,  Uri.parse("sms:" + phoneTextView.getText()));
-                intent.putExtra("sms_body", message);
+                intent.putExtra("sms_body", "MESSAGE");
 
                 if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
                     startActivity(intent);

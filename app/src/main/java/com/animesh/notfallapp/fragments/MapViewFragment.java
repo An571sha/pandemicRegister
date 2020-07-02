@@ -2,36 +2,32 @@ package com.animesh.notfallapp.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.animesh.notfallapp.R;
-import com.animesh.notfallapp.activities.MainActivity;
 import com.animesh.notfallapp.commons.MapsDisplayItem;
 import com.animesh.notfallapp.commons.UserLocationAndStatus;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.animesh.notfallapp.dialogs.BottomSheetDialog;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,7 +39,6 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -67,8 +62,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
     private SupportMapFragment fragment;
     private Bundle mBundle;
-
-
 
     public static MapViewFragment newInstance(int position) {
         MapViewFragment f = new MapViewFragment();
@@ -105,7 +98,85 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        prepareMap(googleMap);
+        googleMap.setMyLocationEnabled(true);
+        googleMap.clear();
+
+        clusterManager = new ClusterManager<MapsDisplayItem>(myContext, googleMap);
+        CustomRenderer<MapsDisplayItem> customRenderer = new CustomRenderer<MapsDisplayItem>(myContext, googleMap, clusterManager);
+
+        clusterManager.setRenderer(customRenderer);
+        LatLngBounds.Builder latLngbuilder = new LatLngBounds.Builder();
+
+        googleMap.setOnMarkerClickListener(clusterManager);
+
+        clusterManager.setOnClusterItemClickListener(mapsDisplayItem -> {
+
+            BottomSheetDialog.showDialog(mapsDisplayItem, requireContext(), requireActivity());
+
+            return true;
+        });
+
+
+        clusterManager.setOnClusterClickListener(cluster -> {
+            float currentZoom = googleMap.getCameraPosition().zoom;
+            updateCameraPos(googleMap, cluster, currentZoom + 2);
+            return true;
+
+        });
+
+        getDataFromFireBase(userIdAndstatus -> {
+
+            clusterManager.clearItems();
+
+            for (UserLocationAndStatus userLocationAndStatus : userIdAndstatus.values()) {
+                LatLng latLng = new LatLng(userLocationAndStatus.getLatitude(), userLocationAndStatus.getLongitude());
+                latLngbuilder.include(latLng);
+
+                MapsDisplayItem mapsDisplayItem = new MapsDisplayItem(userLocationAndStatus.getStatus(),
+                        latLng,
+                        userLocationAndStatus.getAddress(),
+                        userLocationAndStatus.getPhoneNumber());
+                clusterManager.addItem(mapsDisplayItem);
+            }
+
+            clusterManager.cluster();
+
+            //center the camera between the bounds
+            latLngBounds = latLngbuilder.build();
+
+
+        });
+
+
+
+    }
+
+    public void getDataFromFireBase(Consumer<HashMap<String, UserLocationAndStatus>> success){
+        DatabaseReference userRef = userDatabase.child("status");
+        userRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    userIdAndstatus = new HashMap<String, UserLocationAndStatus>();
+
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        UserLocationAndStatus userLocationAndStatus = userSnapshot.getValue(UserLocationAndStatus.class);
+                        userIdAndstatus.put(userSnapshot.getKey(), userLocationAndStatus);
+                    }
+
+                    success.accept(userIdAndstatus);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
+        });
     }
 
     @Override
@@ -141,15 +212,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
         super.onAttach(activity);
     }
 
-    public void prepareMap(GoogleMap googleMap) {
-
-        googleMap.setMyLocationEnabled(true);
-        googleMap.clear();
-        getUserLocationAndStatusData(googleMap);
-    }
-
     //updating the camera position on zoom
-    public void updateCameraPos(Cluster<MapsDisplayItem> cluster, float zoomLevel) {
+
+    public void updateCameraPos(GoogleMap googleMap, Cluster<MapsDisplayItem> cluster, float zoomLevel) {
         //LatLngBound for clicked cluster
         LatLngBounds.Builder latLngBuilderForCluster = new LatLngBounds.Builder();
 
@@ -164,84 +229,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
     }
 
-        public void getUserLocationAndStatusData(GoogleMap googleMap) {
-            String noUserFound = "No users were found";
-
-            DatabaseReference userRef = userDatabase.child("status");
-
-            userRef.addValueEventListener(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-
-                        userIdAndstatus = new HashMap<String, UserLocationAndStatus>();
-
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            UserLocationAndStatus userLocationAndStatus = userSnapshot.getValue(UserLocationAndStatus.class);
-                            userIdAndstatus.put(userSnapshot.getKey(), userLocationAndStatus);
-                        }
-
-                        clusterManager = new ClusterManager<MapsDisplayItem>(myContext, googleMap);
-                        CustomRenderer<MapsDisplayItem> customRenderer = new CustomRenderer<MapsDisplayItem>(myContext, googleMap, clusterManager);
-                        clusterManager.setRenderer(customRenderer);
-                        LatLngBounds.Builder latLngbuilder = new LatLngBounds.Builder();
-
-                        for (UserLocationAndStatus userLocationAndStatus : userIdAndstatus.values()) {
-                            LatLng latLng = new LatLng(userLocationAndStatus.getLatitude(), userLocationAndStatus.getLongitude());
-                            latLngbuilder.include(latLng);
-
-                            MapsDisplayItem mapsDisplayItem = new MapsDisplayItem(userLocationAndStatus.getStatus(),
-                                    latLng,
-                                    userLocationAndStatus.getAddress(),
-                                    userLocationAndStatus.getPhoneNumber());
-                            clusterManager.addItem(mapsDisplayItem);
-                        }
-
-                        //center the camera between the bounds
-                        latLngBounds = latLngbuilder.build();
-
-                        googleMap.setOnMapLoadedCallback(() -> {
-                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, 0);
-                            googleMap.setMinZoomPreference(1f);
-                            googleMap.moveCamera(cameraUpdate);
-                            googleMap.animateCamera(cameraUpdate);
-                            googleMap.getUiSettings().setZoomControlsEnabled(true);
-
-
-                        });
-
-                        //set up marker click listener
-                        googleMap.setOnMarkerClickListener(clusterManager);
-
-                        clusterManager.setOnClusterItemClickListener(mapsDisplayItem -> {
-
-                            Toast.makeText(myContext, mapsDisplayItem.getTitle(), Toast.LENGTH_SHORT).show();
-
-                            return true;
-                        });
-
-
-                        clusterManager.setOnClusterClickListener(cluster -> {
-                            float currentZoom = googleMap.getCameraPosition().zoom;
-                            updateCameraPos(cluster, currentZoom + 2);
-                            return true;
-
-                        });
-
-                    } else {
-                        Toast.makeText(myContext, noUserFound, Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-
-            });
-        }
 
     public static class CustomRenderer<T extends ClusterItem> extends DefaultClusterRenderer<T> {
 
@@ -251,7 +238,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
         @Override
         protected boolean shouldRenderAsCluster(Cluster<T> cluster) {
-            return cluster.getSize() > 2;
+            return cluster.getSize() > 3;
         }
 
         protected int getBucket(Cluster<T> cluster) {

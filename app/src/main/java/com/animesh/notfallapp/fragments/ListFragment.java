@@ -16,8 +16,10 @@ import android.widget.ListView;
 
 import com.animesh.notfallapp.R;
 import com.animesh.notfallapp.adapters.CustomListAdapter;
+import com.animesh.notfallapp.commons.MapsDisplayItem;
 import com.animesh.notfallapp.commons.UserLocationAndStatus;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.animesh.notfallapp.dialogs.BottomSheetDialog;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -73,36 +75,12 @@ public class ListFragment extends Fragment {
 
         listView.setOnItemClickListener((adapter, v1, position, arg3) -> {
             UserLocationAndStatus value = (UserLocationAndStatus) adapter.getItemAtPosition(position);
-
-          //  Toast.makeText(requireContext(), String.valueOf(position) , Toast.LENGTH_SHORT).show();
-                    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
-                    bottomSheetDialog.setContentView(R.layout.bottom_sheet);
-
-                    statusTextView = bottomSheetDialog.findViewById(R.id.status_bottom_sheet);
-                    distanceTextView = bottomSheetDialog.findViewById(R.id.distance_bottom_sheet);
-                    phoneTextView = bottomSheetDialog.findViewById(R.id.phone_bottom_sheet);
-                    addressTextView = bottomSheetDialog.findViewById(R.id.location_bottom_sheet);
-                    callButton = bottomSheetDialog.findViewById(R.id.call_bottom_button);
-                    sendTextButton = bottomSheetDialog.findViewById(R.id.text_bottom_button);
-
-                    statusTextView.setText(value.getStatus());
-                    distanceTextView.setText("No Data");
-                    phoneTextView.setText(value.getPhoneNumber());
-                    addressTextView.setText(value.getAddress());
-
-                    bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-
-                        }
-                    });
-                    bottomSheetDialog.show();
-
-/*
-            Fragment fragment = requireActivity().getSupportFragmentManager().findFragmentByTag("dialog_playback" + latLng.toString());
-                if(fragment != null)
-                requireActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-*/
+            LatLng latLng = new LatLng(value.getLatitude(), value.getLongitude());
+            MapsDisplayItem mapsDisplayItem = new MapsDisplayItem(value.getStatus(),
+                    latLng,
+                    value.getAddress(),
+                    value.getPhoneNumber());
+            BottomSheetDialog.showDialog(mapsDisplayItem, requireContext(), requireActivity());
         });
 
         userRef.addValueEventListener(new ValueEventListener() {
