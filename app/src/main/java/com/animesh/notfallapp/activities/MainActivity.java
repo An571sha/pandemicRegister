@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -23,9 +25,11 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -91,22 +95,20 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
 
 
-    public interface InterfaceDataCommunicatorFromActivity {
-        public void updateData(String data);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         userIdView = findViewById(R.id.user_id);
-
-
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userDatabase = FirebaseDatabase.getInstance().getReference();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
 
         userIdView.setText(user_id);
         location_array = new Location[1];
+
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
@@ -149,7 +151,8 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                //
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_help:
                 //
@@ -160,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     public void loadActivity() {
 
@@ -219,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                     if (location != null) {
                         location_array[0] = location;
                     } else {
-                        Toast.makeText(this, "Cannot retrieve location data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.cannot_retreive_location, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -286,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
 
         } else {
-            Toast.makeText(this, "Cannot retrieve location data, please restart App", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cannot_retieve_restart, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -316,9 +320,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     strAdd = strReturnedAddress.toString();
                     successCallback.accept(strAdd);
-                    Log.w("My Current loction address", strReturnedAddress.toString());
+                    Log.w("My Current location address", strReturnedAddress.toString());
                 } else {
-                    Log.w("My Current loction address", "No Address returned!");
+                    Log.w("My Current location address", "No Address returned!");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -327,4 +331,6 @@ public class MainActivity extends AppCompatActivity {
             return strAdd;
         });
     }
+
+
 }

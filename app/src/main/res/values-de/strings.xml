@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NotfallApp</string>
+    <string name="action_settings">Einstellung</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Galerie</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="home_second">Home Second</string>
+    <string name="name">NAME</string>
+    <string name="email">EMAIL</string>
+    <string name="password">PASSWORT</string>
+    <string name="repeat_password">PASSWORT WIEDERHOLEN</string>
+    <string name="phone_number">HANDYNUMMER</string>
+    <string name="signup">Registieren</string>
+    <string name="don_t_have_an_account">KEIN KONTO VERFÜGBAR?</string>
+    <string name="welcome">WILLKOMEN</string>
+    <string name="title_activity_maps">KARTE</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_items">
+        <item>Home</item>
+        <item>Notifications</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="tab_text_1">KARTE</string>
+    <string name="tab_text_2">LISTE</string>
+    <string name="location">STANDORT</string>
+    <string name="please_select_a_status">Ein Status Auswählen</string>
+    <string name="call">Anrufen</string>
+    <string name="send_text">Nachricht schicken</string>
+    <string name="no_data_available">Keine Daten Verfügbar</string>
+    <string name="cannot_retreive_location">Standort Daten nicht Verügbar</string>
+    <string name="cannot_retieve_restart">Standort Daten nicht Verügbar, App bitte erneut starten</string>
+    <string name="invalid_email">Keine gütige Email oder Passwords stimmen nicht überrein</string>
+    <string name="input_error">Eingabe Fehler</string>
+    <string name="no_data">Keine Daten Verfügbar</string>
+    <string name="ok">Gut</string>
+    <string name="sick">Schlecht</string>
+    <string name="need">Hilfe</string>
+    <string name="can">kann</string>
+    <string name="no_phone">Handynummer nicht Verfügbar</string>
+    <string name="hello_how_are">Hallo, Wie geht es dir?</string>
+    <string name="sign_in">Einloggen</string>
+    <string name="or">OR</string>
+    <string name="i_am_ok">Mir geht es Gut</string>
+    <string name="i_am_sick">Mir geht es Schlecht</string>
+    <string name="i_need_help">Ich brauche Hilfe</string>
+    <string name="i_can_help">Ich kann helfen</string>
+    <string name="select_language">Sprache auswählen</string>
+    <string name="default_language">Default</string>
+    <string name="ui">UI</string>
+    <string name="switch_between">Zwischen Hell und Dunkel Umschalten</string>
+    <string name="help">Hilfe</string>
+    <string name="about_us">Über uns</string>
+
+</resources>

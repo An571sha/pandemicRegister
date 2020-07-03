@@ -78,7 +78,7 @@
             android:background="@color/colorPrimary"
             android:foreground="?attr/selectableItemBackground"
             android:onClick="signInWithEmail"
-            android:text="sign in"
+            android:text="@string/sign_in"
             app:icon="@drawable/ic_menu_send" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -87,7 +87,7 @@
             android:layout_margin="5dp"
             android:fontFamily="@font/advent_pro_light"
             android:gravity="center"
-            android:text="     OR "
+            android:text="@string/or"
 
             />
 

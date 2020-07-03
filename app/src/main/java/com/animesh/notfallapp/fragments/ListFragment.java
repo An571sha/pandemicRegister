@@ -97,7 +97,6 @@ public class ListFragment extends Fragment {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         UserLocationAndStatus userLocationAndStatus = userSnapshot.getValue(UserLocationAndStatus.class);
                         userLocationAndStatuses.add(userLocationAndStatus);
-                        Log.i("SSSSSSSSSSSSSSSS", "THIS SHIT IS FIRING");
                     }
 
                     requireActivity().runOnUiThread(() -> {

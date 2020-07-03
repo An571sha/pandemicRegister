@@ -1,9 +1,13 @@
 package com.animesh.notfallapp.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,6 +36,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -77,6 +83,10 @@ public class LoginActivity extends AppCompatActivity {
                 signInWithGoogle();
             }
         });
+    }
+
+    public void onResume() {
+        super.onResume();
     }
 
     public void signUp(View view) {
@@ -172,17 +182,19 @@ public class LoginActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                //
+                Intent intent = new Intent(LoginActivity.this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_help:
                 //
                 return true;
             case R.id.action_about:
+
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 }

@@ -70,7 +70,7 @@ public class CustomListAdapter extends ArrayAdapter<UserLocationAndStatus> {
 
         } else {
 
-            holder.locationText.setText("No data");
+            holder.locationText.setText(R.string.no_data);
         }
 
         holder.locationText.setEnabled(false);
@@ -81,7 +81,7 @@ public class CustomListAdapter extends ArrayAdapter<UserLocationAndStatus> {
 
         } else {
 
-            holder.phoneText.setText("No data");
+            holder.phoneText.setText(R.string.no_data);
             holder.phoneText.setEnabled(false);
 
         }
@@ -90,16 +90,16 @@ public class CustomListAdapter extends ArrayAdapter<UserLocationAndStatus> {
 
             holder.statusText.setText(userLocationAndStatus.getStatus());
 
-            if (holder.statusText.getText().toString().contains("OK")) {
+            if (holder.statusText.getText().toString().contains(context.getString(R.string.ok))) {
                 holder.statusText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mood_ok_black_18dp, 0, 0, 0);
 
-            } else if (holder.statusText.getText().toString().contains("Sick")) {
+            } else if (holder.statusText.getText().toString().contains(context.getString(R.string.sick))) {
                 holder.statusText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_sentiment_sad_18dp,0,0,0);
 
-            } else if (holder.statusText.getText().toString().contains("need")) {
+            } else if (holder.statusText.getText().toString().contains(context.getString(R.string.need))) {
                 holder.statusText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_accessibility_black_18dp,0,0,0);
 
-            } else if (holder.statusText.getText().toString().contains("can")){
+            } else if (holder.statusText.getText().toString().contains(context.getString(R.string.can))){
                 holder.statusText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_support_black_18dp,0,0,0);
 
             }
@@ -108,7 +108,7 @@ public class CustomListAdapter extends ArrayAdapter<UserLocationAndStatus> {
 
         } else {
 
-            holder.statusText.setText("No data");
+            holder.statusText.setText(R.string.no_data);
         }
 
         return rowView;

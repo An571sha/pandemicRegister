@@ -20,7 +20,6 @@ public class BottomSheetDialog {
     private static EditText addressTextView;
     private static Button callButton;
     private static Button sendTextButton;
-    private static final String MESSAGE = "Hello, how are you";
 
     public static void showDialog(MapsDisplayItem mapsDisplayItem, Context context, Activity activity){
         com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog = new com.google.android.material.bottomsheet.BottomSheetDialog(context);
@@ -34,7 +33,7 @@ public class BottomSheetDialog {
         sendTextButton = bottomSheetDialog.findViewById(R.id.text_bottom_button);
 
         statusTextView.setText(mapsDisplayItem.getTitle());
-        distanceTextView.setText("No Data");
+        distanceTextView.setText(R.string.no_data);
         phoneTextView.setText(mapsDisplayItem.getPhoneNumber());
         addressTextView.setText(mapsDisplayItem.getAddress());
 
@@ -48,7 +47,7 @@ public class BottomSheetDialog {
                 }
 
             } else {
-                Toast.makeText(context, "No Phone number detected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.no_phone, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -56,7 +55,7 @@ public class BottomSheetDialog {
             if (phoneTextView.getText() != null && !phoneTextView.getText().toString().isEmpty()) {
 
                 Intent intent = new Intent(Intent.ACTION_VIEW,  Uri.parse("sms:" + phoneTextView.getText()));
-                intent.putExtra("sms_body", MESSAGE);
+                intent.putExtra("sms_body", R.string.hello_how_are);
 
                 if (intent.resolveActivity(activity.getPackageManager()) != null) {
                     activity.startActivity(intent);
@@ -64,7 +63,7 @@ public class BottomSheetDialog {
 
             } else {
 
-                Toast.makeText(context, "No Phone number detected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.no_phone, Toast.LENGTH_SHORT).show();
 
             }
 

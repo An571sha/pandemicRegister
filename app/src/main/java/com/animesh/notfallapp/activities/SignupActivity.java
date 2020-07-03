@@ -2,8 +2,10 @@ package com.animesh.notfallapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +53,7 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_signup);
 
         emailField = findViewById(R.id.email_signup);
@@ -117,12 +120,12 @@ public class SignupActivity extends AppCompatActivity {
                         });
 
             } else {
-                Toast.makeText(SignupActivity.this, "Oops, invalid email or passwords did not match",
+                Toast.makeText(SignupActivity.this, R.string.invalid_email,
                         Toast.LENGTH_SHORT).show();
             }
 
         } else {
-            Toast.makeText(SignupActivity.this, "Input Error",
+            Toast.makeText(SignupActivity.this, R.string.input_error,
                     Toast.LENGTH_SHORT).show();
         }
     }

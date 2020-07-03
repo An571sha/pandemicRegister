@@ -17,15 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/main"
-            app:title="Map" />
+            app:title="@string/title_activity_maps" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:foregroundTint="@color/foregroundColor"
-            app:tabSelectedTextColor="@color/selectionColor"
+            android:foregroundTint="@color/selectionColor"
+            app:tabSelectedTextColor="@color/foregroundColor"
             app:tabTextColor="@color/colorSnow" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:text="TextView" />
+        android:text="" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

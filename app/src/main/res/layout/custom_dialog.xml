@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="I am OK"/>
+                android:text="@string/i_am_ok"/>
             <RadioButton
                 android:id="@+id/radio_button_2"
                 android:fontFamily="@font/advent_pro_light"
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="I am Sick"/>
+                android:text="@string/i_am_sick"/>
             <RadioButton
                 android:id="@+id/radio_button_3"
                 android:fontFamily="@font/advent_pro_light"
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="I need Help"/>
+                android:text="@string/i_need_help"/>
             <RadioButton
                 android:id="@+id/radio_button_4"
                 android:fontFamily="@font/advent_pro_light"
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="I can Help"/>
+                android:text="@string/i_can_help"/>
         </RadioGroup>
 
         <View
