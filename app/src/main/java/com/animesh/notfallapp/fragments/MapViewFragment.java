@@ -59,6 +59,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
     private final int CAMERA_PADDING = 10;
     private static String FAILURE_TEXT;
     private LatLngBounds latLngBounds;
+    private  LatLng latLng;
 
     private SupportMapFragment fragment;
     private Bundle mBundle;
@@ -99,15 +100,16 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
-        googleMap.clear();
 
         clusterManager = new ClusterManager<MapsDisplayItem>(myContext, googleMap);
-        CustomRenderer<MapsDisplayItem> customRenderer = new CustomRenderer<MapsDisplayItem>(myContext, googleMap, clusterManager);
+        googleMap.setOnMarkerClickListener(clusterManager);
+        googleMap.setOnCameraIdleListener(clusterManager);
 
+        //display a cluster for more than two markers
+        CustomRenderer<MapsDisplayItem> customRenderer = new CustomRenderer<MapsDisplayItem>(myContext, googleMap, clusterManager);
         clusterManager.setRenderer(customRenderer);
         LatLngBounds.Builder latLngbuilder = new LatLngBounds.Builder();
 
-        googleMap.setOnMarkerClickListener(clusterManager);
 
         clusterManager.setOnClusterItemClickListener(mapsDisplayItem -> {
 
@@ -119,7 +121,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
         clusterManager.setOnClusterClickListener(cluster -> {
             float currentZoom = googleMap.getCameraPosition().zoom;
-            updateCameraPos(googleMap, cluster, currentZoom + 2);
+            updateCameraPos(googleMap, cluster, currentZoom + 5);
             return true;
 
         });
@@ -129,7 +131,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
             clusterManager.clearItems();
 
             for (UserLocationAndStatus userLocationAndStatus : userIdAndstatus.values()) {
-                LatLng latLng = new LatLng(userLocationAndStatus.getLatitude(), userLocationAndStatus.getLongitude());
+                latLng = new LatLng(userLocationAndStatus.getLatitude(), userLocationAndStatus.getLongitude());
                 latLngbuilder.include(latLng);
 
                 MapsDisplayItem mapsDisplayItem = new MapsDisplayItem(userLocationAndStatus.getStatus(),
@@ -143,6 +145,24 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
             //center the camera between the bounds
             latLngBounds = latLngbuilder.build();
+
+            googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds,0);
+                    googleMap.setMinZoomPreference(1f);
+                    googleMap.moveCamera(cameraUpdate);
+                    googleMap.animateCamera(cameraUpdate);
+                    googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+                    // if no clusters are present in view bounds, move camera to last cluster on the list
+                    if(!googleMap.getProjection().getVisibleRegion().latLngBounds.contains(latLng)){
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    }
+                }
+            });
+
+
 
 
         });
@@ -238,7 +258,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
         @Override
         protected boolean shouldRenderAsCluster(Cluster<T> cluster) {
-            return cluster.getSize() > 3;
+            return cluster.getSize() > 2;
         }
 
         protected int getBucket(Cluster<T> cluster) {
