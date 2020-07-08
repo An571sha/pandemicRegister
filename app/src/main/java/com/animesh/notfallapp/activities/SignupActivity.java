@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -109,6 +112,8 @@ public class SignupActivity extends AppCompatActivity {
 
                                     intent = new Intent(SignupActivity.this, LoginActivity.class);
                                     startActivity(intent);
+                                    overridePendingTransition(R.transition.slide_in, R.transition.slide_out);
+
 
                                 } else {
                                     String exception = Objects.requireNonNull(task.getException()).toString();
@@ -129,4 +134,34 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_help:
+                Intent actionIntent = new Intent(SignupActivity.this, HelpActivity.class);
+                startActivity(actionIntent);
+                return true;
+            case R.id.action_about:
+                Intent aboutIntent = new Intent(SignupActivity.this, AboutUsActivty.class);
+                startActivity(aboutIntent);
+                return true;
+
+            case R.id.action_sign_out:
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

@@ -15,8 +15,8 @@
     <string name="phone_number">HANDYNUMMER</string>
     <string name="signup">Registieren</string>
     <string name="don_t_have_an_account">KEIN KONTO VERFÜGBAR?</string>
-    <string name="welcome">WILLKOMEN</string>
-    <string name="title_activity_maps">KARTE</string>
+    <string name="welcome">WILKOMMEN</string>
+    <string name="title_activity_maps">Übersicht</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_items">
@@ -56,5 +56,19 @@
     <string name="switch_between">Zwischen Hell und Dunkel Umschalten</string>
     <string name="help">Hilfe</string>
     <string name="about_us">Über uns</string>
+    <string name="sign_out">Abmelden</string>
+    <string name="number_of_sick_people">Anzahl von Menschen, die Betroffen sind:</string>
+    <string name="people_in_need_of_help">Anzahl von Menschen, die Hilfe Brauchen:</string>
+    <string name="people_who_can_help">Anzahl von Menschen, die Helfen können:</string>
+    <string name="help_string_body">This app is to be used in case of a Pandemie,this app allows you to know the location</string>
+    <string name="help_string_hint">Hier in diesem Hilfetext finden Sie allgemeine Anweisungen zur Verwendung dieser App</string>
+    <string name="developer_email">Entwickler Email:</string>
+    <string name="an571sha_htwg_kosntanz_de">an571sha@htwg.kosntanz.de</string>
+    <string name="disclaimer">Wenn Sie Feedback oder Vorschläge zu diesem Projekt haben, können Sie mich gerne kontaktieren</string>
+    <string name="about_us_top">
+Das Pandemie Register wurde im Rahmen des Mobile Anwendung-Projekts an der HTWG Konstanz entwickelt. Dieses Projekt wurde mit Firebase, Android Studio entwickelt und in JAVA geschrieben</string>
+    <string name="developer_name">Entwickler Name:</string>
+    <string name="animesh_sharma">Animesh Sharma</string>
+
 
 </resources>

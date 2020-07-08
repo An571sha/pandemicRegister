@@ -150,15 +150,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
             case R.id.action_help:
-                //
+                Intent actionIntent = new Intent(MainActivity.this, HelpActivity.class);
+                startActivity(actionIntent);
                 return true;
             case R.id.action_about:
+                Intent aboutIntent = new Intent(MainActivity.this, AboutUsActivty.class);
+                startActivity(aboutIntent);
                 return true;
+
+            case R.id.action_sign_out:
+               // log out behaviour
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

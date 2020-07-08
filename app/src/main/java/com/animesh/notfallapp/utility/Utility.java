@@ -1,14 +1,20 @@
 package com.animesh.notfallapp.utility;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.animesh.notfallapp.R;
 import com.animesh.notfallapp.commons.User;
 import com.animesh.notfallapp.commons.UserLocationAndStatus;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class Utility {
@@ -46,6 +52,25 @@ public class Utility {
         String trimmedExceptionName = exception.substring(exception.lastIndexOf(":") + 1).trim();
         Toast.makeText(context, trimmedExceptionName, Toast.LENGTH_SHORT).show();
         Log.i(Utility.getTAG(), trimmedExceptionName);
+    }
+
+    @NonNull
+    public static Resources getLocalizedResources(Context context, Locale desiredLocale) {
+        Configuration conf = context.getResources().getConfiguration();
+        conf = new Configuration(conf);
+        conf.setLocale(desiredLocale);
+        Context localizedContext = context.createConfigurationContext(conf);
+        return localizedContext.getResources();
+    }
+
+    public static boolean checkStringInAllLanguageVariation (Context context, String stringToBeMatched, int StringResourceId){
+        if (stringToBeMatched.equals(Utility.getLocalizedResources(context, Locale.GERMAN).getString(StringResourceId))) {
+            return true;
+        } else if ((stringToBeMatched.equals(Utility.getLocalizedResources(context, Locale.ENGLISH).getString(StringResourceId)))){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

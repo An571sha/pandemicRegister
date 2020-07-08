@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,14 +21,17 @@ import com.animesh.notfallapp.R;
 import com.animesh.notfallapp.commons.MapsDisplayItem;
 import com.animesh.notfallapp.commons.UserLocationAndStatus;
 import com.animesh.notfallapp.dialogs.BottomSheetDialog;
+import com.animesh.notfallapp.utility.Utility;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +42,10 @@ import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -54,7 +61,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
     private DatabaseReference userDatabase;
     private ClusterManager<MapsDisplayItem> clusterManager;
 
-    private static final Executor mExecutor = Executors.newSingleThreadExecutor();
     private static final String ARG_POSITION = "position";
     private final int CAMERA_PADDING = 10;
     private static String FAILURE_TEXT;
@@ -63,6 +69,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
     private SupportMapFragment fragment;
     private Bundle mBundle;
+
+    private TextView mapTopNumberOfSick;
+    private TextView mapTopNumberNeedingHelp;
+    private TextView mapTopNumberWhoCanHelp;
+
+    private List<String> sickList;
+    private List<String> needHelpList;
+    private List<String> canHelpList;
+
 
     public static MapViewFragment newInstance(int position) {
         MapViewFragment f = new MapViewFragment();
@@ -82,6 +97,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
         View rootView = inflater.inflate(R.layout.maps_fragment, container, false);
         userDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mapTopNumberOfSick = rootView.findViewById(R.id.number_sick);
+        mapTopNumberNeedingHelp = rootView.findViewById(R.id.number_need_help);
+        mapTopNumberWhoCanHelp = rootView.findViewById(R.id.number_can_help);
+
+        sickList = new ArrayList<>();
+        canHelpList = new ArrayList<>();
+        needHelpList= new ArrayList<>();
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(mBundle);
@@ -121,7 +144,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
         clusterManager.setOnClusterClickListener(cluster -> {
             float currentZoom = googleMap.getCameraPosition().zoom;
-            updateCameraPos(googleMap, cluster, currentZoom + 5);
+            updateCameraPos(googleMap, cluster, currentZoom + 4);
             return true;
 
         });
@@ -129,8 +152,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
         getDataFromFireBase(userIdAndstatus -> {
 
             clusterManager.clearItems();
+            sickList.clear();
+            canHelpList.clear();
+            needHelpList.clear();
+            mapTopNumberOfSick.setText("");
+            mapTopNumberNeedingHelp.setText("");
+            mapTopNumberWhoCanHelp.setText("");
 
             for (UserLocationAndStatus userLocationAndStatus : userIdAndstatus.values()) {
+
                 latLng = new LatLng(userLocationAndStatus.getLatitude(), userLocationAndStatus.getLongitude());
                 latLngbuilder.include(latLng);
 
@@ -138,7 +168,34 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
                         latLng,
                         userLocationAndStatus.getAddress(),
                         userLocationAndStatus.getPhoneNumber());
+
+                if (userLocationAndStatus.getStatus()!= null && Utility.checkStringInAllLanguageVariation(myContext, userLocationAndStatus.getStatus(), R.string.i_am_sick)) {
+
+                    sickList.add(userLocationAndStatus.getStatus());
+
+                } else if (userLocationAndStatus.getStatus()!= null &&  Utility.checkStringInAllLanguageVariation(myContext, userLocationAndStatus.getStatus(), R.string.i_need_help)) {
+                    needHelpList.add(userLocationAndStatus.getStatus());
+
+                } else if (userLocationAndStatus.getStatus()!= null &&  Utility.checkStringInAllLanguageVariation(myContext, userLocationAndStatus.getStatus(), R.string.i_can_help)) {
+                    canHelpList.add(userLocationAndStatus.getStatus());
+                }
+
                 clusterManager.addItem(mapsDisplayItem);
+            }
+
+            // display data on top of list
+            if (sickList != null && !sickList.isEmpty()) {
+                mapTopNumberOfSick.setText(String.valueOf(sickList.size()));
+            }
+
+            if (needHelpList != null && !needHelpList.isEmpty()) {
+                mapTopNumberNeedingHelp.setText(String.valueOf(needHelpList.size()));
+
+            }
+
+            if (canHelpList != null && !canHelpList.isEmpty()) {
+                mapTopNumberWhoCanHelp.setText(String.valueOf(canHelpList.size()));
+
             }
 
             clusterManager.cluster();
@@ -252,8 +309,11 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
     public static class CustomRenderer<T extends ClusterItem> extends DefaultClusterRenderer<T> {
 
+        private Context context;
+
         public CustomRenderer(Context context, GoogleMap map, ClusterManager<T> clusterManager) {
             super(context, map, clusterManager);
+            this.context = context;
         }
 
         @Override
@@ -261,8 +321,38 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
             return cluster.getSize() > 2;
         }
 
+        @Override
+        protected void onBeforeClusterItemRendered(T item, MarkerOptions markerOptions) {
+
+
+            if (markerOptions.getTitle()!= null && Utility.checkStringInAllLanguageVariation(context, markerOptions.getTitle(), R.string.i_am_ok)) {
+
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+            } else if (markerOptions.getTitle()!= null && Utility.checkStringInAllLanguageVariation(context, markerOptions.getTitle(), R.string.i_can_help)){
+
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+            } else if (markerOptions.getTitle()!= null && Utility.checkStringInAllLanguageVariation(context, markerOptions.getTitle(), R.string.i_need_help)){
+
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+
+            } else if (markerOptions.getTitle()!= null && Utility.checkStringInAllLanguageVariation(context, markerOptions.getTitle(), R.string.i_am_sick)){
+
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+            } else {
+
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+            }
+
+        }
+
+
+
         protected int getBucket(Cluster<T> cluster) {
             return cluster.getSize();
         }
+
     }
 }

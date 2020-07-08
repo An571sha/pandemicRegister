@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
+    private FirebaseUser user;
 
     private final int RC_SIGN_IN = 100;
     private final String USER_ID  = "user_id" ;
@@ -83,6 +84,16 @@ public class LoginActivity extends AppCompatActivity {
                 signInWithGoogle();
             }
         });
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            // User is signed in
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            finish();
+        }
     }
 
     public void onResume() {
@@ -114,6 +125,9 @@ public class LoginActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
+                            overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+                            finish();
+
                         }
                     }
                 });
@@ -138,6 +152,8 @@ public class LoginActivity extends AppCompatActivity {
                             Utility.writeNewUser(userDatabase, email, mAuth.getUid(), Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName(), mAuth.getCurrentUser().getPhoneNumber());
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
+                            overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+                            finish();
 
                         } else {
 
@@ -181,15 +197,16 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(LoginActivity.this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
             case R.id.action_help:
-                //
+                Intent actionIntent = new Intent(LoginActivity.this, HelpActivity.class);
+                startActivity(actionIntent);
                 return true;
             case R.id.action_about:
+                Intent aboutIntent = new Intent(LoginActivity.this, AboutUsActivty.class);
+                startActivity(aboutIntent);
+                return true;
 
+            case R.id.action_sign_out:
                 return true;
 
             default:

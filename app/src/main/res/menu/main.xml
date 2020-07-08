@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        android:icon="@drawable/ic_settings_black_18dp"/>
 
     <item android:id="@+id/action_help"
         android:orderInCategory="101"
@@ -16,4 +11,9 @@
         android:orderInCategory="102"
         android:icon="@drawable/ic_settings_black_18dp"
         android:title="@string/about_us" />
+
+    <item android:id="@+id/action_sign_out"
+        android:orderInCategory="102"
+        android:icon="@drawable/ic_settings_black_18dp"
+        android:title="@string/sign_out" />
 </menu>
