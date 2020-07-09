@@ -1,7 +1,9 @@
 package com.animesh.notfallapp.activities;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,9 +17,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.animesh.notfallapp.Services.NotificationService;
 import com.animesh.notfallapp.utility.Utility;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -55,6 +59,7 @@ import com.animesh.notfallapp.R;
 import com.animesh.notfallapp.adapters.SectionsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -120,6 +125,18 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, LOCATION_PERMS, TAG_CODE_PERMISSION_LOCATION);
         }
 
+        //start notification service
+/*
+        Intent serviceintent =new Intent(this, NotificationService.class);
+        PendingIntent pendingintent = PendingIntent.getService(this,0, serviceintent,0);
+        AlarmManager alarm =(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        if (alarm != null) {
+            alarm.cancel(pendingintent);
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), 0x1388, pendingintent);
+        }
+*/
+
+
 
     }
 
@@ -154,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent actionIntent = new Intent(MainActivity.this, HelpActivity.class);
                 startActivity(actionIntent);
                 return true;
+
             case R.id.action_about:
                 Intent aboutIntent = new Intent(MainActivity.this, AboutUsActivty.class);
                 startActivity(aboutIntent);
@@ -213,7 +231,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        Log.i(Utility.getTAG(), databaseError.getDetails());
+                        Toast.makeText(getApplicationContext(), databaseError.getDetails(), Toast.LENGTH_SHORT).show();
                     }
                 });
 

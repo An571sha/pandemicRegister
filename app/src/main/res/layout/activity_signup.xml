@@ -22,7 +22,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/layout_margin_main"
             android:hint="@string/name"
             app:startIconDrawable="@drawable/ic_account_circle_black_30dp">
 
@@ -30,7 +30,7 @@
                 android:id="@+id/name_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="@dimen/text_box_margin_top" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -38,7 +38,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/layout_margin_main"
             android:hint="@string/phone_number"
             app:startIconDrawable="@drawable/ic_call_black_30dp">
 
@@ -46,7 +46,7 @@
                 android:id="@+id/phone_number_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="@dimen/text_box_margin_top" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,7 +55,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/layout_margin_main"
             android:hint="@string/email"
             app:startIconDrawable="@drawable/ic_alternate_email_black_30dp">
 
@@ -63,7 +63,7 @@
                 android:id="@+id/email_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="@dimen/text_box_margin_top" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,7 +71,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/layout_margin_main"
             android:hint="@string/password"
             app:endIconMode="password_toggle">
 
@@ -79,7 +79,7 @@
                 android:id="@+id/password_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="@dimen/text_box_margin_top" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,7 +87,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/layout_margin_main"
             android:hint="@string/repeat_password"
             app:endIconMode="password_toggle">
 
@@ -95,7 +95,7 @@
                 android:id="@+id/repeat_password_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="@dimen/text_box_margin_top" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,9 +104,9 @@
             android:id="@+id/passwordInputMeter"
             android:layout_width="match_parent"
             android:layout_height="31dp"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/layout_margin_main"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/text_box_margin_top"
             app:animateChanges="true"
             app:animationDuration="300"
             app:labelTextSize="12sp"

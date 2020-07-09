@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NotfallApp</string>
+    <string name="app_name">Pandemic Register</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
@@ -47,7 +47,7 @@
     <string name="sign_in">sign in</string>
     <string name="or">OR</string>
     <string name="i_am_ok">I am OK</string>
-    <string name="i_am_sick">I am Sick</string>
+    <string name="i_am_sick">I feel Sick</string>
     <string name="i_need_help">I need Help</string>
     <string name="i_can_help">I can Help</string>
     <string name="select_language">Select language</string>
@@ -60,7 +60,7 @@
     <string name="number_of_sick_people">Number of Sick People:</string>
     <string name="people_in_need_of_help">People in need of help:</string>
     <string name="people_who_can_help">People who can help:</string>
-    <string name="help_string_body">This app is to be used in case of a Pandemic, this app allows you to know the location and status of someone who is directly affected by the pandemie and also allows you to share and see the status of the person. The map and the list are connected to a central databse and update in realtime to give you the latest data.
+    <string name="help_string_body">This app is to be used in case of a Pandemic, this app allows you to know the location and status of someone who is directly affected by the pandemic and also allows you to share and see the status of the person. The map and the list are connected to a central databse and update in realtime to give you the latest data.
         Different colour on the map indicates different status.
         Green means the person is OK,red mean he is sick, and yellow means he needs help and blue means no data about status has been found.</string>
     <string name="help_string_hint">Here in this help text, you can find the general instructions on how to use this app</string>

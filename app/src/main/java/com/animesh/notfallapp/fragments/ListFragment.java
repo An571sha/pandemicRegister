@@ -1,5 +1,6 @@
 package com.animesh.notfallapp.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -89,20 +90,26 @@ public class ListFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
 
-                    requireActivity().runOnUiThread(() -> {
-                        userLocationAndStatuses.clear();
-                        resultListAdapter.clear();
-                    });
+                    Context context = getContext();
+
+                    if (context != null) {
+                        requireActivity().runOnUiThread(() -> {
+                            userLocationAndStatuses.clear();
+                            resultListAdapter.clear();
+                        });
+                    }
 
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         UserLocationAndStatus userLocationAndStatus = userSnapshot.getValue(UserLocationAndStatus.class);
                         userLocationAndStatuses.add(userLocationAndStatus);
                     }
 
-                    requireActivity().runOnUiThread(() -> {
-                        resultListAdapter.notifyDataSetChanged();
-                        listView.invalidateViews();
-                    });
+                    if (context != null) {
+                        requireActivity().runOnUiThread(() -> {
+                            resultListAdapter.notifyDataSetChanged();
+                            listView.invalidateViews();
+                        });
+                    }
 
                 }
             }
