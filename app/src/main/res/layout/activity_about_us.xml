@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AboutUsActivty">
+    tools:context=".activities.AboutUsActivity">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -28,15 +28,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/layout_margin_main"
-            android:textSize="@dimen/text_size_body"
             android:fontFamily="@font/advent_pro_light"
-            android:text="@string/about_us_top" />
+            android:text="@string/about_us_top"
+            android:textSize="@dimen/text_size_body" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="@dimen/line_width"
+            android:layout_marginBottom="@dimen/line_width"
             android:background="#5d5d5d" />
 
         <LinearLayout
@@ -77,21 +77,21 @@
 
         </LinearLayout>
 
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/advent_pro_light"
+            android:layout_margin="@dimen/layout_margin_main"
+            android:text="@string/disclaimer"
+            android:textSize="@dimen/text_size_body" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+
+        <Button
+            android:id="@+id/contact_about_us"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_margin_main"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:textSize="@dimen/text_size_body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/advent_pro_light"
-                android:text="@string/disclaimer" />
-
-        </LinearLayout>
+            android:text="@string/contact" />
 
     </LinearLayout>
 

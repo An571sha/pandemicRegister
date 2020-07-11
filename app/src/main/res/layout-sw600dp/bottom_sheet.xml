@@ -36,8 +36,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="@dimen/line_width"
+                android:layout_marginBottom="@dimen/line_width"
                 android:background="#5d5d5d" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -51,8 +51,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="@dimen/line_width"
+                android:layout_marginBottom="@dimen/line_width"
                 android:background="#5d5d5d" />
 
         </LinearLayout>
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:layout_margin="5dp"
-        android:textSize="13sp"
+        android:textSize="@dimen/bottom_sheet_text"
         android:singleLine="true"
         android:drawableStart="@drawable/ic_location_on_black_18dp"
         android:drawablePadding="16dp"/>
@@ -75,9 +75,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/layout_margin_main"
         android:singleLine="true"
-        android:textSize="13sp"
+        android:textSize="@dimen/bottom_sheet_text"
         android:drawableStart="@drawable/ic_call_black_18dp"
         android:drawablePadding="16dp"/>
 

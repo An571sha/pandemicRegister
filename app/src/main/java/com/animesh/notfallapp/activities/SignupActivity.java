@@ -2,10 +2,8 @@ package com.animesh.notfallapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -152,7 +150,7 @@ public class SignupActivity extends AppCompatActivity {
                 startActivity(actionIntent);
                 return true;
             case R.id.action_about:
-                Intent aboutIntent = new Intent(SignupActivity.this, AboutUsActivty.class);
+                Intent aboutIntent = new Intent(SignupActivity.this, AboutUsActivity.class);
                 startActivity(aboutIntent);
                 return true;
 

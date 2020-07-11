@@ -60,14 +60,18 @@
     <string name="number_of_sick_people">Number of Sick People:</string>
     <string name="people_in_need_of_help">People in need of help:</string>
     <string name="people_who_can_help">People who can help:</string>
-    <string name="help_string_body">This app is to be used in case of a Pandemic, this app allows you to know the location and status of someone who is directly affected by the pandemic and also allows you to share and see the status of the person. The map and the list are connected to a central databse and update in realtime to give you the latest data.
-        Different colour on the map indicates different status.
-        Green means the person is OK,red mean he is sick, and yellow means he needs help and blue means no data about status has been found.</string>
+    <string name="help_string_body">This app is to be used in case of a Pandemic, this app allows you to know the location and status of someone who is directly affected by the pandemic and also allows you to share and see the status of the person. The map and the list are connected to a central database and update in realtime to give you the latest data.
+        Different colour on the map indicates different status.\n
+        \n
+        Green means the person is OK \n Red mean he is sick \n  Yellow means he needs help \n Blue means he can help \n  Azure means no status can be found. \n
+        \n
+        GPS needs to be turned on in order to use this app \n </string>
     <string name="help_string_hint">Here in this help text, you can find the general instructions on how to use this app</string>
     <string name="developer_email">Developer Email:</string>
-    <string name="an571sha_htwg_kosntanz_de">an571sha@htwg.kosntanz.de</string>
+    <string name="an571sha_htwg_kosntanz_de">an571sha@htwg-konstanz.de</string>
     <string name="disclaimer">If you have any feedback or suggestion regarding this project, feel free to contact me</string>
     <string name="about_us_top">Pandemie Register has been developed as a part of Mobile Anwendung project at the HTWG Konstanz. This project has been developed using Firebase, Android Studio and written in JAVA</string>
     <string name="developer_name">Developer name:</string>
     <string name="animesh_sharma">Animesh Sharma</string>
+    <string name="contact">contact</string>
 </resources>

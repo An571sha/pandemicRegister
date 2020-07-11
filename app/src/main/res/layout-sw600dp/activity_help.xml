@@ -35,8 +35,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="@dimen/line_width"
+            android:layout_marginBottom="@dimen/line_width"
             android:background="#5d5d5d" />
 
         <com.google.android.material.textview.MaterialTextView

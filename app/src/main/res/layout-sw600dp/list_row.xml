@@ -14,7 +14,7 @@
         android:background="@android:color/transparent"
         android:fontFamily="@font/advent_pro_light"
         android:textColor="@color/colorPrimary"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_body"
         android:textStyle="bold" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -24,7 +24,7 @@
         android:drawablePadding="2dp"
         android:background="@android:color/transparent"
         android:descendantFocusability="blocksDescendants"
-        android:textSize="13sp"
+        android:textSize="@dimen/bottom_sheet_text"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:drawableStart="@drawable/ic_location_on_black_18dp"
@@ -37,9 +37,9 @@
         android:drawablePadding="2dp"
         android:descendantFocusability="blocksDescendants"
         android:background="@android:color/transparent"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/layout_margin_main"
         android:singleLine="true"
-        android:textSize="13sp"
+        android:textSize="@dimen/bottom_sheet_text"
         android:drawableStart="@drawable/ic_call_black_18dp"/>
 
     <View
