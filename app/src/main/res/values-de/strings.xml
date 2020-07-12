@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NotfallApp</string>
+    <string name="app_name">Pandemie Register</string>
     <string name="action_settings">Einstellung</string>
 
     <string name="menu_home">Home</string>
