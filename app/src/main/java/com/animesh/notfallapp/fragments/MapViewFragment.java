@@ -63,9 +63,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
 
     private static final String ARG_POSITION = "position";
     private final int CAMERA_PADDING = 10;
-    private static String FAILURE_TEXT;
     private LatLngBounds latLngBounds;
-    private  LatLng latLng;
+    private LatLng latLng;
 
     private SupportMapFragment fragment;
     private Bundle mBundle;
@@ -96,6 +95,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.maps_fragment, container, false);
+        setRetainInstance(true);
         userDatabase = FirebaseDatabase.getInstance().getReference();
 
         mapTopNumberOfSick = rootView.findViewById(R.id.number_sick);
@@ -219,13 +219,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback  {
                 }
             });
 
-
-
-
         });
-
-
-
     }
 
     public void getDataFromFireBase(Consumer<HashMap<String, UserLocationAndStatus>> success){

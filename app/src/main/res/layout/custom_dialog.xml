@@ -33,7 +33,6 @@
 
         <RadioGroup
             android:id="@+id/status_radio_group"
-            android:checkedButton="@+id/radio_button_1"
             android:layout_margin="@dimen/layout_margin_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

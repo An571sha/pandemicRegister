@@ -8,6 +8,7 @@ public class UserLocationAndStatus {
     private String address;
     private String status;
     private String phoneNumber;
+    private int distanceToUserLocation;
 
     public UserLocationAndStatus(String userId, Double latitude, Double longitude, String address, String status, String phoneNumber) {
         this.userId = userId;
@@ -16,6 +17,16 @@ public class UserLocationAndStatus {
         this.address = address;
         this.status = status;
         this.phoneNumber = phoneNumber;
+    }
+
+    public UserLocationAndStatus(String userId, Double latitude, Double longitude, String address, String status, String phoneNumber, int distanceToUserLocation) {
+        this.userId = userId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.status = status;
+        this.phoneNumber = phoneNumber;
+        this.distanceToUserLocation = distanceToUserLocation;
     }
 
     public UserLocationAndStatus() {
@@ -68,6 +79,14 @@ public class UserLocationAndStatus {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getDistanceToUserLocation() {
+        return distanceToUserLocation;
+    }
+
+    public void setDistanceToUserLocation(int distanceToUserLocation) {
+        this.distanceToUserLocation = distanceToUserLocation;
     }
 
 

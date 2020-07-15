@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.animesh.notfallapp.fragments.ListFragment;
 import com.animesh.notfallapp.utility.Utility;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -177,11 +178,11 @@ public class MainActivity extends AppCompatActivity {
     public void loadActivity() {
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
         FloatingActionButton fab = findViewById(R.id.fab);
 
         //enable GPS
@@ -231,12 +232,18 @@ public class MainActivity extends AppCompatActivity {
                 .addOnSuccessListener(this, location -> {
                     // Got last known location. In some rare situations this can be null.
                     if (location != null) {
-                        location_array[0] = location;
+                        location_array[0]= location;
+
+                        Bundle bundle = new Bundle();
+                        bundle.putDouble("longitude", location.getLongitude());
+                        bundle.putDouble("latitude", location.getLatitude());
+                        ListFragment listFragment = new ListFragment();
+                        listFragment.setArguments(bundle);
+
                     } else {
                         Toast.makeText(this, R.string.cannot_retreive_location, Toast.LENGTH_SHORT).show();
                     }
                 });
-
 
         fab.setOnClickListener(view -> createDialogBoxForStatus(location_array[0]));
     }
